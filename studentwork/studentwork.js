@@ -42,12 +42,23 @@ let Student = function (input) {
     this.score = infoArray[5];
 };
 
+const studentArray = [];
+
 function checkInputFormat(input,type) {
     switch (type) {
         case "studentID":
             return (/^[0-9]+?[,0-9]*$/.test(input));
         case "studentInfo":
-            return (/^[A-Za-z]+?[,A-Za-z]*$/.test(input));
+            return (/^[A-Za-z]+[,0-9]+[,A-Za-z]+[:0-9]+?[,A-Za-z]+[:0-9]*$/.test(input));
     }
 }
 
+// function addStudentInfo() {
+//     rl.question("",(userInput) => {
+//         if(!checkInputFormat(userInput,"studentInfo")) {
+//             rl.close();
+//             return console.log("请按正确的格式输入（格式：姓名, 学号, 学科:成绩, ...）：");
+//         }
+//         const infoArray = userInput.split(",");
+//     });
+// }

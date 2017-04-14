@@ -20,10 +20,17 @@ describe("test print prompt string when build student info",() => {
 });
 
 describe("test input format ",() => {
-    it("input studentID is right",() => {
+    it("input studentInfo is right",() => {
+        const inputStr = "zc,111,math:99,chinese:99";
+        const type = "studentInfo";
 
-        const inputStr = "111,111";
+        expect(checkInputFormat(inputStr,type)).toBe(true);
+    });
+
+    it("input studentID is right", () => {
+        const inputStr = "222,111,543,444";
         const type = "studentID";
+
         expect(checkInputFormat(inputStr,type)).toBe(true);
     });
 });
