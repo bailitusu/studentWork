@@ -20,7 +20,34 @@ function mainMenu() {
             case "3":
                 thisSoftExit();
                 break;
+            default:
+                break;
         }
         rl.close();
     });
 }
+
+function buildStudentInfoPromptString() {
+    const promptStr = "请输入要打印的学生的学号（格式： 学号, 学号,...），按回车提交："
+    console.log(promptStr);
+}
+
+let Student = function (input) {
+    const infoArray = input.split(",");
+    this.name = infoArray[0];
+    this.studentID = infoArray[1];
+    this.nation = infoArray[2];
+    this.sclass = infoArray[3];
+    this.course = infoArray[4];
+    this.score = infoArray[5];
+};
+
+function checkInputFormat(input,type) {
+    switch (type) {
+        case "studentID":
+            return (/^[0-9]+?[,0-9]*$/.test(input));
+        case "studentInfo":
+            return (/^[A-Za-z]+?[,A-Za-z]*$/.test(input));
+    }
+}
+
