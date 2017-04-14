@@ -21,7 +21,7 @@ describe("test print prompt string when build student info",() => {
 
 describe("test input format ",() => {
     it("input studentInfo is right",() => {
-        const inputStr = "zc,111,math:99,chinese:99";
+        const inputStr = "zc,111,hanzu,class,math:99,chinese:99";
         const type = "studentInfo";
 
         expect(checkInputFormat(inputStr,type)).toBe(true);
@@ -33,4 +33,12 @@ describe("test input format ",() => {
 
         expect(checkInputFormat(inputStr,type)).toBe(true);
     });
+});
+
+describe("test input same studentID", ()=> {
+   it("input same studentID", () => {
+       const inputArray = [222,111,111,333];
+
+       expect(isThisArrayContainsSameItem(inputArray)).toBe(true);
+   });
 });

@@ -38,8 +38,10 @@ let Student = function (input) {
     this.studentID = infoArray[1];
     this.nation = infoArray[2];
     this.sclass = infoArray[3];
-    this.course = infoArray[4];
-    this.score = infoArray[5];
+    this.scoreArray = [];
+    for(let i = 4; i < infoArray.length; i++) {
+        this.score.push(Object.assign({},{course: infoArray[i].split(":")[0],score: infoArray[i].split(":")[1]}));
+    }
 };
 
 const studentArray = [];
@@ -47,18 +49,45 @@ const studentArray = [];
 function checkInputFormat(input,type) {
     switch (type) {
         case "studentID":
-            return (/^[0-9]+?[,0-9]*$/.test(input));
+            if(/^[0-9]+?[,0-9]*$/.test(input)) {
+                return !isThisArrayContainsSameItem(input.split[","]);
+            }
+            return false;
         case "studentInfo":
-            return (/^[A-Za-z]+[,0-9]+[,A-Za-z]+[:0-9]+?[,A-Za-z]+[:0-9]*$/.test(input));
+            return (/^[A-Za-z]+[,0-9]+[,A-Za-z]+[,A-Za-z]+[,A-Za-z]+[:0-9]+?[,A-Za-z]+[:0-9]*$/.test(input));
     }
 }
+function isExistThisStudent(obj) {
+    for(let item of studentArray) {
+        if(item.studentID === obj.studentID) {
+            return true;
+        }
+    }
+    return false;
+}
 
-// function addStudentInfo() {
-//     rl.question("",(userInput) => {
-//         if(!checkInputFormat(userInput,"studentInfo")) {
-//             rl.close();
-//             return console.log("请按正确的格式输入（格式：姓名, 学号, 学科:成绩, ...）：");
-//         }
-//         const infoArray = userInput.split(",");
-//     });
-// }
+function isThisArrayContainsSameItem(inputArray) {
+    for(let i = 0; i < inputArray.length; i++) {
+        for(let j = i+1; j < inputArray.length; j++) {
+            if(inputArray[i] === inputArray[j]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function addStudentInfo() {
+    rl.question("",(userInput) => {
+        if(!checkInputFormat(userInput,"studentInfo")) {
+            rl.close();
+            return console.log("请按正确的格式输入（格式：姓名, 学号, 学科:成绩, ...）：");
+        }
+        const infoArray = userInput.split(",");
+        let studentObj = {};
+
+
+    });
+}
+
+
