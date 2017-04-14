@@ -9,7 +9,7 @@ const rl = readline.createInterface({
 function mainMenu() {
     const printStr = "1.添加学生\n2.生成成绩单\n3.退出\n4.请输入你的选择（1～3）：";
     console.log(printStr);
-    rl.question("",(userInput) => {
+    rl.question("", (userInput) => {
         switch (userInput) {
             case "1":
                 addStudentAchievement();
@@ -39,18 +39,18 @@ let Student = function (input) {
     this.nation = infoArray[2];
     this.sclass = infoArray[3];
     this.scoreArray = [];
-    for(let i = 4; i < infoArray.length; i++) {
-        this.score.push(Object.assign({},{course: infoArray[i].split(":")[0],score: infoArray[i].split(":")[1]}));
+    for (let i = 4; i < infoArray.length; i++) {
+        this.score.push(Object.assign({}, {course: infoArray[i].split(":")[0], score: infoArray[i].split(":")[1]}));
     }
 };
 
 const studentArray = [];
 
-function checkInputFormat(input,type) {
+function checkInputFormat(input, type) {
     switch (type) {
         case "studentID":
-            if(/^[0-9]+?[,0-9]*$/.test(input)) {
-                return !isThisArrayContainsSameItem(input.split[","]);
+            if (/^[0-9]+?[,0-9]*$/.test(input)) {
+                return !isThisArrayContainsSameItem(input.split(","));
             }
             return false;
         case "studentInfo":
@@ -58,8 +58,8 @@ function checkInputFormat(input,type) {
     }
 }
 function isExistThisStudent(obj) {
-    for(let item of studentArray) {
-        if(item.studentID === obj.studentID) {
+    for (let item of studentArray) {
+        if (item.studentID === obj.studentID) {
             return true;
         }
     }
@@ -67,9 +67,9 @@ function isExistThisStudent(obj) {
 }
 
 function isThisArrayContainsSameItem(inputArray) {
-    for(let i = 0; i < inputArray.length; i++) {
-        for(let j = i+1; j < inputArray.length; j++) {
-            if(inputArray[i] === inputArray[j]) {
+    for (let i = 0; i < inputArray.length; i++) {
+        for (let j = i + 1; j < inputArray.length; j++) {
+            if (inputArray[i] === inputArray[j]) {
                 return true;
             }
         }
@@ -78,8 +78,8 @@ function isThisArrayContainsSameItem(inputArray) {
 }
 
 function addStudentInfo() {
-    rl.question("",(userInput) => {
-        if(!checkInputFormat(userInput,"studentInfo")) {
+    rl.question("", (userInput) => {
+        if (!checkInputFormat(userInput, "studentInfo")) {
             rl.close();
             return console.log("请按正确的格式输入（格式：姓名, 学号, 学科:成绩, ...）：");
         }
