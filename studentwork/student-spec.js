@@ -12,7 +12,7 @@ xdescribe("MainMenu test", () => {
 describe("test print prompt string when build student info", () => {
     it("print prompt is right", () => {
         spyOn(console, 'log');
-        const printStr = "请输入要打印的学生的学号（格式： 学号, 学号,...），按回车提交：";
+        const printStr = "请输入学生信息（格式：姓名, 学号, 民族, 班级, 学科: 成绩, ...），按回车提交：";
         buildStudentInfoPromptString();
 
         expect(console.log).toHaveBeenCalledWith(printStr);
@@ -38,7 +38,6 @@ describe("test input format ", () => {
 describe("test input same studentID", () => {
     it("input same studentID", () => {
         const inputArray = [222, 111, 111, 333];
-
         expect(isThisArrayContainsSameItem(inputArray)).toBe(true);
     });
 });
