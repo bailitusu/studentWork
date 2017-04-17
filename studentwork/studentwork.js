@@ -70,18 +70,14 @@ class Student {
 // let stdobj = new Student("zc,111,han,banji,math:99,yuwen:99");
 
 
-
-function checkInputFormat(input, type) {
-    switch (type) {
-        case "studentID":
-            if (/^[0-9]+?[,0-9]*$/.test(input)) {
-                return !isThisArrayContainsSameItem(input.split(","));
-            }
-            return false;
-        case "studentInfo":
-            return (/^[\u4e00-\u9fa5A-Za-z]+[,0-9]+[,\u4e00-\u9fa5A-Za-z]+[,\u4e00-\u9fa5A-Za-z]+[,\u4e00-\u9fa5A-Za-z]+[:0-9]*$/.test(input));
-    }
+function checkStudentInfo(input) {
+    return (/^[\u4e00-\u9fa5A-Za-z]+[,0-9]+[,\u4e00-\u9fa5A-Za-z]+[,\u4e00-\u9fa5A-Za-z]+([,\u4e00-\u9fa5A-Za-z]+[:0-9]*)*$/.test(input));
 }
+
+function checkStudentID(input) {
+    return /^[0-9]+?[,0-9]*$/.test(input);
+}
+
 function isExistThisStudent(obj) {
     for (let item of studentArray) {
         if (item.studentID === obj.studentID) {
@@ -104,7 +100,7 @@ function buildStudentInfoPromptString() {
 
 function addStudentInfo() {
     rl.question("", (userInput) => {
-        if (!checkInputFormat(userInput, "studentInfo")) {
+        if (!checkStudentInfo(userInput)) {
             console.log("请按正确的格式输入（格式：姓名, 学号, 学科:成绩, ...）：");
             addStudentInfo();
             return;
@@ -141,7 +137,7 @@ function buildStudentReportPromptString() {
 
 function createReportByInputStudentID() {
     rl.question("", (userInput) => {
-        if (!checkInputFormat(userInput, "studentID")) {
+        if (!(checkStudentID(input) && isThisArrayContainsSameItem(input.split(",")))) {
             console.log("请按正确的格式输入要打印的学生的学号（格式： 学号, 学号,...），按回车提交：");
             createReportByInputStudentID();
             return;

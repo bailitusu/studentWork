@@ -19,19 +19,31 @@ describe("test print prompt string when build student info", () => {
     });
 });
 
-describe("test input format ", () => {
-    it("input studentInfo is right", () => {
-        const inputStr = "zc,111,hanzu,class,math:99,chinese:99";
-        const type = "studentInfo";
+describe("check studentInfo", () => {
+    it("when input is valid", () => {
+        const input = "zc,111,hanzu,class,math:99,chinese:99";
 
-        expect(checkInputFormat(inputStr, type)).toBe(true);
+        expect(checkStudentInfo(input)).toBe(true);
     });
 
-    it("input studentID is right", () => {
-        const inputStr = "222,111,543,444";
-        const type = "studentID";
+    it("when input is invalid", () => {
+        const input = "invalid test data";
 
-        expect(checkInputFormat(inputStr, type)).toBe(true);
+        expect(checkStudentInfo(input)).toBe(false);
+    });
+});
+
+describe("check studentID", () => {
+   it("when input is valid", () => {
+       const input = "222,111,543,444";
+
+       expect(checkStudentID(input)).toBe(true);
+   });
+
+    it("when input is invalid", () => {
+        const input = "222,xx,444";
+
+        expect(checkStudentID(input)).toBe(false);
     });
 });
 
