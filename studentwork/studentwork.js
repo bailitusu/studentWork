@@ -10,40 +10,26 @@ let studentArray = [];
 function mainMenu() {
     const printStr = "1.添加学生\n2.生成成绩单\n3.退出\n4.请输入你的选择（1～3）：";
     console.log(printStr);
-    let exitFlag = false;
 
-        rl.question("", (userInput) => {
-            switch (userInput) {
-                case "1":
-                    addStudentScore();
-                    break;
-                case "2":
-                    printReport();
-                    break;
-                case "3":
-                    // thisSoftExit();
-                    exitFlag = true;
-                    break;
-                default:
-                    break;
-            }
-            console.log("run -- main")
+    rl.question("", (userInput) => {
+        switch (userInput) {
+            case "1":
+                addStudentScore();
+                break;
+            case "2":
+                printStudentReport();
+                break;
+            case "3":
+                process.exit();
+                break;
+            default:
+                break;
+        }
 
-        });
+    });
 
 }
-// mainMenu();
-// let Student = function (input) {
-//     const infoArray = input.split(",");
-//     this.name = infoArray[0];
-//     this.studentID = infoArray[1];
-//     this.nation = infoArray[2];
-//     this.sclass = infoArray[3];
-//     this.scoreArray = [];
-//     for (let i = 4; i < infoArray.length; i++) {
-//         this.scoreArray.push(Object.assign({}, {course: infoArray[i].split(":")[0], score: infoArray[i].split(":")[1]}));
-//     }
-// };
+
 class Student {
     constructor(input) {
         const infoArray = input.split(",");
@@ -52,12 +38,33 @@ class Student {
         this.nation = infoArray[2];
         this.sclass = infoArray[3];
         this.scoreArray = [];
+        this.totalScore = 0;
         for (let i = 4; i < infoArray.length; i++) {
             this.scoreArray.push(Object.assign({}, {course: infoArray[i].split(":")[0], score: infoArray[i].split(":")[1]}));
+            this.totalScore += Number(infoArray[i].split(":")[1]);
         }
+        this.averageScore = this.totalScore / this.scoreArray.length;
     }
     updateStudentScore(studentObj) {
-        this.scoreArray = studentObj.scoreArray;
+        studentObj.scoreArray.forEach((item) => {
+            let sameItem = this.scoreArray.find((thisItem) => {
+                return thisItem.course === item.course;
+            });
+            if(sameItem === undefined) {
+                this.scoreArray.push(item);
+            }else {
+                for(let updateItem of this.scoreArray) {
+                    if(updateItem.course === item.course) {
+                        updateItem.score = item.course;
+                    }
+                }
+            }
+        });
+        this.totalScore = 0;
+        this.scoreArray.forEach((item) => {
+            this.totalScore += Number(item.score);
+        });
+        this.averageScore = this.totalScore / this.scoreArray.length;
     }
 }
 // let stdobj = new Student("zc,111,han,banji,math:99,yuwen:99");
@@ -72,7 +79,7 @@ function checkInputFormat(input, type) {
             }
             return false;
         case "studentInfo":
-            return (/^[\u4e00-\u9fa5A-Za-z]+[,0-9]+[,\u4e00-\u9fa5A-Za-z]+[,\u4e00-\u9fa5A-Za-z]+[,\u4e00-\u9fa5A-Za-z]+[:0-9]+?[,\u4e00-\u9fa5A-Za-z]+[:0-9]*$/.test(input));
+            return (/^[\u4e00-\u9fa5A-Za-z]+[,0-9]+[,\u4e00-\u9fa5A-Za-z]+[,\u4e00-\u9fa5A-Za-z]+[,\u4e00-\u9fa5A-Za-z]+[:0-9]*$/.test(input));
     }
 }
 function isExistThisStudent(obj) {
@@ -86,7 +93,7 @@ function isExistThisStudent(obj) {
 
 function isThisArrayContainsSameItem(inputArray) {
     return inputArray.filter((element, index , thisArray) => {
-        return thisArray.indexOf(element, index+1) > -1;
+            return thisArray.indexOf(element, index+1) > -1;
         }) > 0;
 }
 
@@ -122,4 +129,46 @@ function addStudentScore() {
     addStudentInfo();
 }
 
+function printStudentReport() {
+    buildStudentReportPromptString();
+    createReportByInputStudentID();
+}
 
+function buildStudentReportPromptString() {
+    const promptStr = "请输入要打印的学生的学号（格式： 学号, 学号,...），按回车提交：";
+    console.log(promptStr);
+}
+
+function createReportByInputStudentID() {
+    rl.question("", (userInput) => {
+        if (!checkInputFormat(userInput, "studentID")) {
+            console.log("请按正确的格式输入要打印的学生的学号（格式： 学号, 学号,...），按回车提交：");
+            createReportByInputStudentID();
+            return;
+        }
+        let reportStr = "成绩单\n姓名|数学|语文|英语|编程|平均分|总分\n========================\n"
+        // let reportStr = "成绩单\n";
+        let reportStudent;
+        let allStudentAverageScore = 0
+        for(let ID of userInput.split(",")) {
+            reportStudent = studentArray.find((item) => {
+                return item.studentID === ID;
+            });
+            if(reportStudent === undefined) {
+                console.log("所查询的某学生不存在,请从新输入");
+                mainMenu();
+                return;
+            }
+            reportStr += `${reportStudent.name}|`;
+            for(let scoreItem of reportStudent.scoreArray) {
+                reportStr += `${scoreItem.score}|`;
+            }
+            reportStr += `${reportStudent.averageScore}|${reportStudent.totalScore}\n`;
+            allStudentAverageScore += reportStudent.averageScore;
+        }
+        reportStr += `========================\n全班总分平均数：${allStudentAverageScore}`;
+        console.log(reportStr);
+        mainMenu();
+    });
+}
+mainMenu();
