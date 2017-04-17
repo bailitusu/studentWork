@@ -31,20 +31,16 @@ function mainMenu() {
 }
 
 class Student {
-    constructor(input) {
-        const infoArray = input.split(",");
-        this.name = infoArray[0];
-        this.studentID = infoArray[1];
-        this.nation = infoArray[2];
-        this.sclass = infoArray[3];
-        this.scoreArray = [];
-        this.totalScore = 0;
-        for (let i = 4; i < infoArray.length; i++) {
-            this.scoreArray.push(Object.assign({}, {course: infoArray[i].split(":")[0], score: infoArray[i].split(":")[1]}));
-            this.totalScore += Number(infoArray[i].split(":")[1]);
-        }
-        this.averageScore = this.totalScore / this.scoreArray.length;
+    constructor(name, studentID, nation, sclass, scoreArray, totalScore, averageScore) {
+        this.name = name;
+        this.studentID = studentID;
+        this.nation = nation;
+        this.sclass = sclass;
+        this.scoreArray = scoreArray;
+        this.totalScore = totalScore;
+        this.averageScore = averageScore;
     }
+
     updateStudentScore(studentObj) {
         studentObj.scoreArray.forEach((item) => {
             let sameItem = this.scoreArray.find((thisItem) => {
@@ -67,8 +63,22 @@ class Student {
         this.averageScore = this.totalScore / this.scoreArray.length;
     }
 }
-// let stdobj = new Student("zc,111,han,banji,math:99,yuwen:99");
 
+function generateStudent(input) {
+    const infoArray = input.split(",");
+    const name = infoArray[0];
+    const studentID = infoArray[1];
+    const nation = infoArray[2];
+    const sclass = infoArray[3];
+    let scoreArray = [];
+    const totalScore = 0;
+    for (let i = 4; i < infoArray.length; i++) {
+        this.scoreArray.push(Object.assign({}, {course: infoArray[i].split(":")[0], score: infoArray[i].split(":")[1]}));
+        this.totalScore += Number(infoArray[i].split(":")[1]);
+    }
+    const averageScore = this.totalScore / this.scoreArray.length;
+    return new Student(name, studentID, nation, sclass, scoreArray, totalScore, averageScore);
+}
 
 function checkStudentInfo(input) {
     return (/^[\u4e00-\u9fa5A-Za-z]+[,0-9]+[,\u4e00-\u9fa5A-Za-z]+[,\u4e00-\u9fa5A-Za-z]+([,\u4e00-\u9fa5A-Za-z]+[:0-9]*)*$/.test(input));
@@ -105,7 +115,7 @@ function addStudentInfo() {
             addStudentInfo();
             return;
         }
-        const newStudentObj = new Student(userInput);
+        const newStudentObj = generateStudent(userInput);
         if(!isExistThisStudent(newStudentObj)) {
             studentArray.push(newStudentObj);
             console.log(`学生${newStudentObj.name}的成绩被添加`);
